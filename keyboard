@@ -1,0 +1,90 @@
+#!/bin/python3
+
+import sys, subprocess
+
+def Help():
+    print("""Usage:
+    keyboard <command> [options]
+
+Commands:
+    on    turns on embeded keyboard
+    off   turns off embeded keyboard
+
+Options:
+    -n, --name <"name">   turns on/off keyboard with received name [default: AT Translated Set 2 keyboard]
+
+Use "keyboard --help" to see usage guide.""")
+
+
+def GetDeviceList():
+    devices = subprocess.run(['xinput', 'list'], stdout=subprocess.PIPE).stdout.decode('utf-8')
+    return devices.split('\n')
+
+
+argv = sys.argv
+if len(argv) in [2, 4]:
+    mode = argv[1]
+
+    keyboard_name = 'AT Translated Set 2 keyboard'
+
+    if len(argv) == 2:
+        if mode in ['on', 'off'] and argv[2] == '-n' or argv[2] == '--name':
+            keyboard_name = argv[3]
+        else:
+            Help()
+            exit(0)
+
+    if mode == 'on':
+        devices = GetDeviceList()
+
+        found = False
+        switched = False
+        for device in devices:
+            if device.find(keyboard_name) != -1:
+                found = True
+
+            if device.find('∼ ' + keyboard_name) != -1:
+                i = device.find('id')
+                id = device[i + 3:i + 5]
+
+                subprocess.run(['xinput', 'reattach', id, '3'])
+                print('Keyboard turned on')
+                switched = True
+                break
+
+        if not(found):
+            print("""No such keyboard found
+
+Use "xinput list" to see list of devices""")
+        elif not(switched):
+            print('Keyboard is already turned on')
+    elif mode == 'off':
+        devices = GetDeviceList()
+
+        found = False
+        switched = False
+        for device in devices:
+            if device.find(keyboard_name) != -1:
+                found = True
+
+            if device.find('↳ ' + keyboard_name) != -1:
+                i = device.find('id')
+                id = device[i + 3:i + 5]
+
+                subprocess.run(['xinput', 'float', id])
+                print('Keyboard turned off')
+                switched = True
+                break
+
+        if not(found):
+            print("""No such keyboard found
+
+Use "xinput list" to see list of devices""")
+        elif not(switched):
+            print('Keyboard is already turned off')
+    elif mode == '--help':
+        Help()
+    else:
+        Help()
+else:
+    Help()
