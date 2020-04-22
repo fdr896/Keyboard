@@ -4,7 +4,7 @@ Console application which can turn on/off your embeded keyboard.
 ## Installing
 * First of all install `xinput` on your machine (`xorg-xinput` for Arch)
 
-* Than install [`Python 3`][https://www.python.org/downloads/]
+* Than install [`Python 3`](https://www.python.org/downloads/)
 
 * After you successfully installed `xinput` put `keyboard` /bin (or in any folder in $PATH)
 
