@@ -6,7 +6,7 @@ Console application which can turn on/off your embeded keyboard.
 
 * Than install [`Python 3`](https://www.python.org/downloads/)
 
-* After you successfully installed `xinput` put `keyboard` /bin (or in any folder in $PATH)
+* After you successfully installed `xinput` put `keyboard` in /bin (or in any other folder in $PATH)
 
 ## Usage
 Run `keyboard --help` in your *command prompt*  and read usage guide
